@@ -1,0 +1,159 @@
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}My Website{% endblock %}</title>
+        <meta name="description" content="ANDO BUSCANDO is a real-estate template">
+        <meta name="author" content="Kimarotec">
+        <meta name="keyword" content="html5, css, bootstrap, property, real-estate theme , bootstrap template">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="shortcut icon" href="{%static 'assets/img/icono-pestana.ico' %}" type="image/x-icon">
+        <link rel="icon" href="{%static 'assets/img/icono-pestana.ico' %}" type="image/x-icon">
+        <link rel="stylesheet" href="{% static 'assets/css/normalize.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/fontello.css' %}">
+        <link href="{% static 'assets/fonts/icon-7-stroke/css/pe-icon-7-stroke.css' %}" rel="stylesheet">
+        <link href="{% static 'assets/fonts/icon-7-stroke/css/helper.css' %}" rel="stylesheet">
+        <link href="{% static 'assets/css/animate.css' %}" rel="stylesheet" media="screen">
+        <link rel="stylesheet" href="{% static 'assets/css/bootstrap-select.min.css' %}"> 
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/icheck.min_all.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/price-range.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.css' %}">  
+        <link rel="stylesheet" href="{% static 'assets/css/owl.theme.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/owl.transitions.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/wizard.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    </head>
+    <body>
+        
+        <div id="preloader">
+            <div id="status">&nbsp;</div>
+        </div>
+        <!-- Body content -->
+        {% include 'partials/header.html' %}
+        <!--End top header -->
+
+        {% include 'partials/navbar.html' %}
+        <!-- End of nav bar -->
+
+        <main>
+            {% block content %}
+            <!-- Este bloque guarda el contenido de cada página -->
+            {% endblock %}
+        </main>
+
+          <!-- Footer area-->
+        {% include 'partials/footer.html' %}
+       
+        <script src="{% static 'assets/js/modernizr-2.6.2.min.js' %}"></script>
+
+        <script src="{% static 'assets/js/jquery-1.10.2.min.js' %}"></script>
+        <script src="{% static '/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'assets/js/bootstrap-select.min.js' %}"></script>
+        <script src="{% static 'assets/js/bootstrap-hover-dropdown.js' %}"></script>
+
+        <script src="{% static 'assets/js/easypiechart.min.js' %}"></script>
+        <script src="{% static 'assets/js/jquery.easypiechart.min.js' %}"></script>
+
+        <script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>   
+        <script src="{% static 'assets/js/wow.js' %}"></script>
+
+        <script src="{% static 'assets/js/icheck.min.js' %}"></script>
+        <script src="{% static 'assets/js/price-range.js' %}"></script>
+        <script src="{% static 'assets/js/jquery.bootstrap.wizard.js' %}" type="text/javascript"></script>
+        <script src="{% static 'assets/js/jquery.validate.min.js' %}"></script>
+        <script src="{% static 'assets/js/wizard.js' %}"></script>
+        <script src="{% static 'assets/js/main.js' %}"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+       
+        <!-- Scripts personalizados -->
+        <script src="{% static 'assets/js/alert_auto_hide.js' %}"></script>
+        <script src="{% static 'assets/js/api_barrios.js' %}"></script>
+    </body>
+</html>
+
+{% block extra_js %}
+<script>
+// Función para modal
+  $(document).ready(function () {
+    const referrer = document.referrer;
+
+    // Mostrar solo si NO viene del mismo sitio
+    if (!referrer || !referrer.includes(window.location.hostname)) {
+      $('#videoModal').modal('show');
+    }
+
+    // Detener el video al cerrar el modal
+    $('#videoModal').on('hidden.bs.modal', function () {
+      const video = document.getElementById("introVideo");
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
+  });
+
+// Función para filtros de búsqueda
+ document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("busqueda-form");
+    const mensaje = document.getElementById("mensaje-filtros");
+
+    // Función para validar filtros
+    function hayFiltrosValidos() {
+        const barrio = form.querySelector('[name="barrio"]').value?.trim();
+        const tipoOperacion = form.querySelector('[name="tipo_operacion"]').value?.trim();
+        const tipoPropiedad = form.querySelector('[name="tipo_propiedad"]').value?.trim();
+        const moneda = form.querySelector('[name="moneda"]').value?.trim();
+        const minPrecio = form.querySelector('[name="min_precio"]').value?.trim();
+        const maxPrecio = form.querySelector('[name="max_precio"]').value?.trim();
+        const metrosCuadrados = form.querySelector('[name="metros_cuadrados"]').value?.trim();
+        const ambientes = form.querySelector('[name="ambientes"]').value?.trim();
+
+        const valoresInvalidos = ["", "Operacion", "Moneda", null, undefined];
+
+        const filtros = [barrio, tipoOperacion, tipoPropiedad, moneda, minPrecio, maxPrecio, metrosCuadrados, ambientes];
+
+        return filtros.some(valor => !valoresInvalidos.includes(valor));
+    }
+
+    // Validación al enviar el formulario
+    form.addEventListener("submit", function (event) {
+        if (!hayFiltrosValidos()) {
+            event.preventDefault(); // Detiene envío
+            mensaje.style.display = "block"; // Muestra advertencia
+        } else {
+            mensaje.style.display = "none"; // Oculta mensaje
+        }
+    });
+
+    // Escuchamos cualquier cambio en inputs o selects para ocultar el mensaje
+    const campos = form.querySelectorAll('select, input');
+    campos.forEach(campo => {
+        campo.addEventListener("input", () => {
+            if (mensaje.style.display === "block" && hayFiltrosValidos()) {
+                mensaje.style.display = "none";
+            }
+        });
+        campo.addEventListener("change", () => {
+            if (mensaje.style.display === "block" && hayFiltrosValidos()) {
+                mensaje.style.display = "none";
+            }
+        });
+    });
+}); 
+</script>
+{% endblock extra_js %}

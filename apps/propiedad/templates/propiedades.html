@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ANDO BUSCANDO | Propiedades{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        {% if messages %}
+            <div class="alert alert-info fade-out">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+<!-- Page header -->
+<div class="page-head"> 
+    <div class="container">
+        <div class="row">
+            <div class="page-head-content">
+                <h1 class="page-title">Listado de propiedades publicadas</h1>               
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- property area -->
+<div class="properties-area recent-property" style="background-color: #FFF;">
+    <div class="container"> 
+        <div class="row  pr0 padding-top-40 properties-page">
+            <div class="col-md-12 padding-bottom-40 large-search"> 
+                <div class="search-form wow pulse" style="text-align: center;" data-wow-delay="0.8s">
+                    {% include 'partials/formulario_busqueda_propiedades.html' %}
+                </div>
+            </div>
+
+            <div class="col-md-12  clear"> 
+                <div class="col-xs-10 page-subheader sorting pl0">
+                    <ul class="sort-by-list">
+                    {% with request.GET.order as current_order %}
+                    {% with request.GET.urlencode as current_query %}
+                        {% with current_query|cut:'&orderby=fecha_creacion'|cut:'&order=ASC'|cut:'&order=DESC' as clean_query %}
+                            {% if clean_query %}
+                                <li class="{% if current_order == "ASC" or not current_order %}active{% endif %}">
+                                    <a href="?{{ clean_query }}&orderby=fecha_creacion&order=ASC">Más antiguos primero <i class="fa fa-sort-amount-asc"></i></a>
+                                </li>
+                                <li class="{% if current_order == "DESC" %}active{% endif %}">
+                                    <a href="?{{ clean_query }}&orderby=fecha_creacion&order=DESC">Más recientes primero <i class="fa fa-sort-amount-desc"></i></a>
+                                </li>
+                            {% else %}
+                                <li class="active">
+                                    <a href="?orderby=fecha_creacion&order=ASC">Más antiguos primero <i class="fa fa-sort-amount-asc"></i></a>
+                                </li>
+                                <li>
+                                    <a href="?orderby=fecha_creacion&order=DESC">Más recientes primero <i class="fa fa-sort-amount-desc"></i></a>
+                                </li>
+                            {% endif %}
+                        {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                    </ul>
+                </div>
+                <div class="col-xs-2 layout-switcher">
+                    <a class="layout-list" href="javascript:void(0);"> <i class="fa fa-th-list"></i>  </a>
+                    <a class="layout-grid active" href="javascript:void(0);"> <i class="fa fa-th"></i> </a>                          
+                </div><!--/ .layout-switcher-->
+            </div>
+
+            <div class="col-md-12 clear "> 
+                <div id="list-type" class="proerty-th">
+                {% if propiedades %}
+                    {% for propiedad in propiedades%}
+                    <div class="col-sm-6 col-md-3 p0">
+                        <div class="box-two proerty-item">
+                            <div class="item-thumb">
+                                <a href="{% url 'detalles_propiedad' propiedad.id %}" >    
+                                {% if propiedad.foto %}
+                                    <img src="{{ propiedad.foto.url }}">
+                                {% else %}
+                                    <p>No hay imagen disponible</p>
+                                {% endif %}</a>
+                            </div>
+
+                            <div class="item-entry overflow">
+                                <h5><a href="{% url 'detalles_propiedad' propiedad.id %}">{{propiedad.titulo}}</a></h5>
+                                <div class="dot-hr"></div>
+                                <span class="pull-left"><b> Moneda: </b>{{propiedad.moneda}} </span>
+                                <span class="proerty-price pull-right"> $ {{propiedad.precio}}</span>
+                                <p style="display: none;">{{propiedad.descripcion}}</p>
+                                <div class="property-icon">
+                                    <label>Amb: {{propiedad.ambientes}}|</label>
+                                    <label>Fecha public: {{propiedad.fecha_creacion}}</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> 
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-warning mt-4">
+                        No se encontraron resultados.
+                    </div>
+                {% endif %}
+
+            <div class="col-md-12 clear"> 
+                <div class="pull-right">
+                <div class="pagination">
+                    <ul>
+                        {% if propiedades.has_previous %}
+                            <li><a href="?page=1{% if request.GET %}&{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}{% endif %}">Primera</a></li>
+                            <li><a href="?page={{ propiedades.previous_page_number }}{% if request.GET %}&{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}{% endif %}">Anterior</a></li>
+                        {% endif %}
+                    
+                        {% for num in propiedades.paginator.page_range %}
+                            {% if propiedades.number == num %}
+                                <li class="active"><a href="#">{{ num }}</a></li>
+                            {% elif num > propiedades.number|add:'-3' and num < propiedades.number|add:'3' %}
+                                <li><a href="?page={{ num }}{% if request.GET %}&{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}{% endif %}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    
+                        {% if propiedades.has_next %}
+                            <li><a href="?page={{ propiedades.next_page_number }}{% if request.GET %}&{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}{% endif %}">Siguiente</a></li>
+                            <li><a href="?page={{ propiedades.paginator.num_pages }}{% if request.GET %}&{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}{% endif %}">Última</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                </div>                
+            </div>
+        </div>                
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% load static %}
+<nav class="navbar navbar-default ">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'assets/img/logo2.png' %}" alt=""></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse yamm" id="navigation">
+            {% if not user.is_authenticated %}
+                <!-- Si no está logueado, mostrar el botón de login -->
+                <div class="button navbar-right">
+                    <a href="{% url 'login' %}" class="navbar-btn nav-button wow bounceInRight login" data-wow-delay="0.4s">Iniciar sesión</a>
+                </div>
+            {% endif %}
+            <ul class="main-nav nav navbar-nav navbar-right">
+                <li class="dropdown ymm-sw " data-wow-delay="0.1s">
+                    <a href="{% url 'index' %}">Inicio</a>
+                </li>
+
+                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="{% url 'busquedas' %}">Búsquedas</a></li>
+                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="{% url 'propiedades' %}">Propiedades</a></li>
+                <!-- <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="property.html">Property</a></li> -->
+                {% if user.is_authenticated %}
+                <li class="dropdown yamm-fw" data-wow-delay="0.1s">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">¡Hola, {{ user.first_name }} {{ user.last_name }}! {% if user.is_agente %}(Agente){% endif %} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="yamm-content">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h5>Cliente</h5>
+                                        <ul> 
+                                            <li><a href="{% url 'acciones_usuario' %}">Publicar una búsqueda</a> </li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {% if user.is_agente %}
+                                        <h5>Agente</h5>
+                                        <ul> 
+                                            <li><a href="{% url 'cargar_propiedad' %}">Publicar una propiedad</a> </li>
+                                            <li><a href="{% url 'mis_propiedades' %}">Ver mis propiedades</a></li>
+
+                                        </ul>
+                                        {% endif %}
+                                    </div>
+                                    <!-- <div class="col-sm-3">
+                                        {% if user.is_moderador %}
+                                        <h5>Moderador</h5>
+                                        <ul> 
+                                            <li><a href="{% url ' ' %}">Acción de moderador</a> </li>
+                                            <li><a href="{% url ' ' %}">Acción de moderador</a></li>
+
+                                        </ul>
+                                        {% endif %}                                            
+                                    </div> -->
+                                    <div class="col-sm-6">
+                                        <h5>Mi cuenta</h5>
+                                        <ul>
+                                            <li><a href="{% url 'perfil' %}">Perfil</a></li>
+                                            <li><a href="{% url 'soy_agente' %}">Soy Agente Inmobiliario</a></li>
+                                            <li><a href="{% url 'cambiar_contrasenia' %}">Cambiar contraseña</a></li>
+                                            <li><form action="{% url 'logout' %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit">Cerrar sesión</button>
+                                            </form></li>
+                                            <br>
+                                            <li><a href="{% url 'eliminar_cuenta' %}">Eliminar cuenta</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.yamm-content -->
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                <!-- <li class="wow fadeInDown" data-wow-delay="0.4s"><a href="contact.html">Contacto</a></li> -->
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

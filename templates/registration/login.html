@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ANDO BUSCANDO | Iniciar sesión{% endblock %}
+
+{% block content %}
+    <!-- Mostrar mensajes -->
+    <div class="container">
+        {% if messages %}
+            <div class="alert alert-success fade-out">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="page-head"> 
+        <div class="container">
+            <div class="row">
+                <div class="page-head-content">
+                    <h1 class="page-title">Iniciar sesión</h1>               
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End page header -->        
+
+    <!-- Área de inicio de sesión -->
+    <div class="d-flex justify-content-center align-items-center" style="background-color: rgb(249, 249, 249); min-height: 60vh; display: flex; justify-content: center; align-items: center;">
+        <div class="register-area" style="background-color: rgb(249, 249, 249); width: 100%; max-width: 500px; padding: 20px; border-radius: 8px;">
+
+            <!-- Sección de inicio de sesión -->
+            <div class="col-md-12">
+                <div class="box-for overflow">                         
+                    <div class="col-md-12 col-xs-12 login-blocks">
+                        <h2>Iniciá sesión : </h2> 
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <!-- Errores en el formulario -->
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <ul>
+                                    {% for error in form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            <!-- Campo de usuario -->
+                            <div class="form-group">
+                                <label for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+                                <input type="text" name="username" value="{{ form.data.username }}" id="{{ form.username.id_for_label }}" class="form-control" required>
+                                {% if form.username.errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in form.username.errors %}
+                                            <p>{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Campo de contraseña -->
+                            <div class="form-group">
+                                <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                                <input type="password" name="password" value="{{ form.data.password }}" id="{{ form.password.id_for_label }}" class="form-control" required>
+                                {% if form.password.errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in form.password.errors %}
+                                            <p>{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Botón de inicio de sesión -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-default">Ingresar</button>
+                            </div>
+                        </form>
+                        <br>
+                        <div class="text-center">
+                            <p>¿No tenés una cuenta? <a href="{% url 'registro' %}" class="navbar-btn nav-button wow bounceInRight login" data-wow-delay="0.4s">¡Registrate!</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>      
+{% endblock %}
